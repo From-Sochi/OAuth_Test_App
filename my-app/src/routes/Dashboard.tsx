@@ -1,101 +1,157 @@
-import { useEffect } from 'react';
-import {
-    Config,
-    OAuthList,
-    Auth,
-    WidgetEvents,
-    OAuthListInternalEvents,
-    ConfigResponseMode,
-    ConfigSource,
-    OAuthName
-} from '@vkid/sdk';
+import { useState, useRef } from 'react';
+import '../index.css';
 
-interface AuthSuccessData {
-    access_token: string;
-    expires_in: number;
-    user_id: number;
-    email?: string;
-    // другие поля ответа
+const initialState: TaskProps[] = [];
+
+type TaskProps = {
+    id: string;
+    name: string;
+    done: boolean;
 }
 
-interface LoginSuccessPayload {
-    code: string;
-    device_id: string;
-}
+type FilterOption = 'all' | 'completed' | 'active' | 'alphabet';
 
-function Dashboard() {
-    useEffect(() => {
-        // Инициализация конфигурации VK ID
-        Config.init({
-            app: 54140536, // Ваш ID приложения
-            redirectUrl: 'https://from-sochi.github.io/STAR-WARS/', // Используем точный redirect URL из настроек VK
-            responseMode: ConfigResponseMode.Callback,
-            source: ConfigSource.LOWCODE,
-            scope: 'email', // Запрашиваем email пользователя
-        });
+function Dashboards() {
+    const [taskList, setTaskList] = useState<TaskProps[]>(initialState);
+    const [newTask, setNewTask] = useState('');
+    const [filter, setFilter] = useState<FilterOption>('all');
+    const nextId = useRef(4);
 
-        const container = document.getElementById('vkid-container');
-        if (!container) return;
+    // Функция для фильтрации и сортировки задач
+    const getFilteredAndSortedTasks = () => {
+        let filteredTasks = [...taskList];
+        
+        // Фильтрация
+        switch (filter) {
+            case 'completed':
+                filteredTasks = filteredTasks.filter(task => task.done);
+                break;
+            case 'active':
+                filteredTasks = filteredTasks.filter(task => !task.done);
+                break;
+            case 'alphabet':
+                filteredTasks = filteredTasks.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            default:
+                // 'all' - без фильтрации
+                break;
+        }
+        
+        return filteredTasks;
+    };
 
-        // Очищаем контейнер перед рендером
-        container.innerHTML = '';
+    function checkTask(id: string) {
+        setTaskList(tasks => 
+            tasks.map(task => 
+                task.id === id ? { ...task, done: !task.done } : task
+            )
+        );
+    }
 
-        const oAuth = new OAuthList();
+    function handleFilterChange(option: FilterOption) {
+        setFilter(option);
+    }
 
-        oAuth.render({
-            container: container,
-            oauthList: [OAuthName.VK], // Исправлено: используем OAuthName.VK вместо OAuthName.VKID
-        })
-            .on(WidgetEvents.ERROR, (error: any) => {
-                console.error('Ошибка авторизации VK ID:', error);
-                // Здесь можно добавить обработку ошибок для пользователя
-            })
-            .on(OAuthListInternalEvents.LOGIN_SUCCESS, (payload: LoginSuccessPayload) => {
-                console.log('Получен код авторизации:', payload.code);
+    function handleChange(id: string, newName: string) {
+        setTaskList(tasks => 
+            tasks.map(task => 
+                task.id === id ? { ...task, name: newName } : task
+            )
+        );
+    }
 
-                // Обмен кода на access token
-                Auth.exchangeCode(payload.code, payload.device_id)
-                    .then((data: AuthSuccessData) => {
-                        console.log('Успешная авторизация:', data);
+    function deleteTask(id: string) {
+        setTaskList(tasks => tasks.filter(task => task.id !== id));
+    }
 
-                        // Сохраняем данные в localStorage
-                        localStorage.setItem('vk_token', data.access_token);
-                        localStorage.setItem('vk_user_id', data.user_id.toString());
+    function addTask() {
+        if (!newTask.trim()) return;
+        setTaskList(prev => [...prev, {
+            id: nextId.current.toString(),
+            name: newTask,
+            done: false,
+        }]);
+        nextId.current += 1;
+        setNewTask('');
+    }
 
-                        if (data.email) {
-                            localStorage.setItem('vk_email', data.email);
-                        }
+    // Получаем отфильтрованные и отсортированные задачи
+    const filteredTasks = getFilteredAndSortedTasks();
 
-                        // Здесь можно перенаправить пользователя или обновить состояние приложения
-                        alert('Авторизация прошла успешно!');
-
-                    })
-                    .catch((error: any) => {
-                        console.error('Ошибка обмена кода на токен:', error);
-                        alert('Ошибка авторизации: ' + error.message);
-                    });
-            });
-
-        return () => {
-            // Очистка при размонтировании компонента
-            if (container) {
-                container.innerHTML = '';
-            }
-        };
-    }, []);
+    const items = filteredTasks.map((task) => {
+        return (
+            <div key={task.id} className="task-item">
+                <input
+                    type="text"
+                    value={task.name}
+                    className="task-input"
+                    onChange={(e) => handleChange(task.id, e.target.value)}
+                />
+                <input 
+                    type="checkbox" 
+                    onChange={() => checkTask(task.id)} 
+                    checked={task.done} 
+                />
+                <button
+                    className="delete-button"
+                    onClick={() => deleteTask(task.id)}
+                >
+                    Delete ✕
+                </button>
+            </div>
+        )
+    });
 
     return (
-        <div style={{ padding: '20px', margin: 'auto', minWidth: '300px', maxWidth: '600px' }}>
-            <h2>Вход через VK</h2>
+        <div className="todo-container">
+            <h1 className="todo-header">
+                {taskList.length > 0 ? 'Может хватит?' : 'Накидай-ка себе задач, лентяй...'}
+            </h1>
 
-            <div id="vkid-container"></div>
+            <div className="add-task-container">
+                <input
+                    type="text"
+                    placeholder='Вот сюда...'
+                    value={newTask}
+                    className="add-task-input"
+                    onChange={(e) => setNewTask(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && addTask()}
+                />
+                <button className="add-task-button" onClick={addTask}>
+                    Add
+                </button>
+            </div>
 
-            <div style={{ marginTop: '20px', fontSize: '12px', color: '#666' }}>
-                <p>App ID: 54140536</p>
-                <p>Redirect URL: http://localhost/</p>
+            {taskList.length > 0 && (
+                <>
+                    <div className="filter-task-container">
+                        <select 
+                            className='filter-task-input'
+                            value={filter}
+                            onChange={(e) => handleFilterChange(e.target.value as FilterOption)}
+                        >
+                            <option value="all">Все задачи</option>
+                            <option value="alphabet">По алфавиту</option>
+                            <option value="completed">Выполненные</option>
+                            <option value="active">Не выполненные</option>
+                        </select>
+                    </div>
+                    <hr style={{ marginBottom: '20px' }} />
+                </>
+            )}
+
+            <div className="tasks-list">
+                {items.length > 0 ? items : (
+                    <div className="empty-state">
+                        {taskList.length === 0 
+                            ? 'Ты всё сделал, дурачок... 🎉' 
+                            : 'Нет задач по выбранному фильтру...'
+                        }
+                    </div>
+                )}
             </div>
         </div>
-    );
+    )
 }
 
-export default Dashboard;
+export default Dashboards;

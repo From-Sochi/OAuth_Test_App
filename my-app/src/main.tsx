@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import Root, { loader as rootLoader } from './routes/root.tsx';
 import ErrorPage404 from './error-page-404.tsx';
+import Entrance from './routes/Entrance.tsx';
 import Dashboard from './routes/Dashboard.tsx';
 import { LoadingSpinner } from './routes/LoadingSpinner.tsx';
 
@@ -17,13 +18,13 @@ const router = createBrowserRouter([
         element: <Root />,
         errorElement: <ErrorPage404 />,
         loader: rootLoader,
-        HydrateFallback: LoadingSpinner, 
+        HydrateFallback: LoadingSpinner,
         children: [
             {
                 index: true,
                 element: (
                     <Suspense fallback={<LoadingSpinner />}>
-                        <Dashboard />
+                        <Entrance />
                     </Suspense>
                 ),
             },
@@ -35,9 +36,6 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-         
-      
-           
         ],
     },
 ]);
