@@ -15,7 +15,6 @@ interface AuthSuccessData {
     expires_in: number;
     user_id: number;
     email?: string;
-    // другие поля ответа
 }
 
 interface LoginSuccessPayload {
