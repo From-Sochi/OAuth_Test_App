@@ -15,5 +15,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/OAuth-Test-App/', // ← УБЕДИТЕСЬ ЧТО ПУТЬ ПРАВИЛЬНЫЙ
+  base: '/OAuth_Test_App/', // ← УБЕДИТЕСЬ ЧТО ПУТЬ ПРАВИЛЬНЫЙ
 })
