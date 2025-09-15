@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         ],
     },
 ], {
-    basename: '/OAuth_Test_App/' // ← ДОБАВЬТЕ ЭТУ СТРОКУ
+    basename: '/STAR-WARS/' // ← ДОБАВЬТЕ ЭТУ СТРОКУ
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
