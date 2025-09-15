@@ -15,5 +15,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/STAR-WARS/', // ← УБЕДИТЕСЬ ЧТО ПУТЬ ПРАВИЛЬНЫЙ
+  base: '/OAuth-Test-App/', // ← УБЕДИТЕСЬ ЧТО ПУТЬ ПРАВИЛЬНЫЙ
 })
