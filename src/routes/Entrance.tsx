@@ -27,7 +27,7 @@ function Entrance() {
         // Инициализация конфигурации VK ID
         Config.init({
             app: 54140536, // Ваш ID приложения
-            redirectUrl: 'https://from-sochi.github.io/STAR-WARS/', // Используем точный redirect URL из настроек VK
+            redirectUrl: 'https://from-sochi.github.io/OAuth_Test_App/', // Используем точный redirect URL из настроек VK
             responseMode: ConfigResponseMode.Callback,
             source: ConfigSource.LOWCODE,
             scope: 'email', // Запрашиваем email пользователя
