@@ -111,7 +111,7 @@ function Dashboards() {
             <div className="add-task-container">
                 <input
                     type="text"
-                    placeholder='Вот сюда...'
+                    placeholder='Add new task...'
                     value={newTask}
                     className="add-task-input"
                     onChange={(e) => setNewTask(e.target.value)}
