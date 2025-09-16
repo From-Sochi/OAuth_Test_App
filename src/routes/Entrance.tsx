@@ -9,6 +9,7 @@ import {
     ConfigSource,
     OAuthName
 } from '@vkid/sdk';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthSuccessData {
     access_token: string;
@@ -23,6 +24,8 @@ interface LoginSuccessPayload {
 }
 
 function Entrance() {
+    const navigate = useNavigate();
+
     useEffect(() => {
         // Инициализация конфигурации VK ID
         Config.init({
@@ -66,7 +69,10 @@ function Entrance() {
                         }
 
                         // Здесь можно перенаправить пользователя или обновить состояние приложения
-                        alert('Авторизация прошла успешно!');
+                        // alert('Авторизация прошла успешно!');
+
+                        window.location.href = 'https://from-sochi.github.io/STAR-WARS/';
+
 
                     })
                     .catch((error: any) => {
@@ -81,7 +87,7 @@ function Entrance() {
                 container.innerHTML = '';
             }
         };
-    }, []);
+    }, [navigate]);
 
     return (
         <div style={{ padding: '20px', margin: 'auto', minWidth: '300px', maxWidth: '600px' }}>
