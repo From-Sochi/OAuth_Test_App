@@ -17,11 +17,9 @@ function Dashboards() {
     const [filter, setFilter] = useState<FilterOption>('all');
     const nextId = useRef(4);
 
-    // Функция для фильтрации и сортировки задач
     const getFilteredAndSortedTasks = () => {
         let filteredTasks = [...taskList];
-        
-        // Фильтрация
+
         switch (filter) {
             case 'completed':
                 filteredTasks = filteredTasks.filter(task => task.done);
@@ -36,13 +34,13 @@ function Dashboards() {
                 // 'all' - без фильтрации
                 break;
         }
-        
+
         return filteredTasks;
     };
 
     function checkTask(id: string) {
-        setTaskList(tasks => 
-            tasks.map(task => 
+        setTaskList(tasks =>
+            tasks.map(task =>
                 task.id === id ? { ...task, done: !task.done } : task
             )
         );
@@ -53,8 +51,8 @@ function Dashboards() {
     }
 
     function handleChange(id: string, newName: string) {
-        setTaskList(tasks => 
-            tasks.map(task => 
+        setTaskList(tasks =>
+            tasks.map(task =>
                 task.id === id ? { ...task, name: newName } : task
             )
         );
@@ -75,7 +73,6 @@ function Dashboards() {
         setNewTask('');
     }
 
-    // Получаем отфильтрованные и отсортированные задачи
     const filteredTasks = getFilteredAndSortedTasks();
 
     const items = filteredTasks.map((task) => {
@@ -87,10 +84,10 @@ function Dashboards() {
                     className="task-input"
                     onChange={(e) => handleChange(task.id, e.target.value)}
                 />
-                <input 
-                    type="checkbox" 
-                    onChange={() => checkTask(task.id)} 
-                    checked={task.done} 
+                <input
+                    type="checkbox"
+                    onChange={() => checkTask(task.id)}
+                    checked={task.done}
                 />
                 <button
                     className="delete-button"
@@ -125,7 +122,7 @@ function Dashboards() {
             {taskList.length > 0 && (
                 <>
                     <div className="filter-task-container">
-                        <select 
+                        <select
                             className='filter-task-input'
                             value={filter}
                             onChange={(e) => handleFilterChange(e.target.value as FilterOption)}
@@ -143,8 +140,8 @@ function Dashboards() {
             <div className="tasks-list">
                 {items.length > 0 ? items : (
                     <div className="empty-state">
-                        {taskList.length === 0 
-                            ? 'Ты всё сделал, дурачок... 🎉' 
+                        {taskList.length === 0
+                            ? 'Ты всё сделал, дурачок... 🎉'
                             : 'Нет задач по выбранному фильтру...'
                         }
                     </div>
