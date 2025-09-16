@@ -18,9 +18,7 @@ function Root() {
     return (
         <>
             <nav>
-                {/* <Link to={`/entrance/1`} className={isActive('entrance') ? 'active' : ''}>Войти</Link> */}
-
-                <Link to={`/entrance`} className={isActive('entrance') ? 'active' : ''}>Войти</Link>
+                <Link to={`/entrance/1`} className={isActive('entrance') ? 'active' : ''}>Войти</Link>
                 <Link to={`/dashboard/main`} className={isActive('dashboard') ? 'active' : ''}>Без авторизации</Link>
             </nav>
             <main>
