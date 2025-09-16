@@ -12,16 +12,54 @@ import Entrance from './routes/Entrance.tsx';
 import Dashboard from './routes/Dashboard.tsx';
 import { LoadingSpinner } from './routes/LoadingSpinner.tsx';
 
+// const router = createBrowserRouter([
+//     {
+//         path: '/',
+//         element: <Root />,
+//         errorElement: <ErrorPage404 />,
+//         loader: rootLoader,
+//         HydrateFallback: LoadingSpinner,
+//         children: [
+//             {
+//                 index: true,
+//                 element: (
+//                     <Suspense fallback={<LoadingSpinner />}>
+//                         <Entrance />
+//                     </Suspense>
+//                 ),
+//             },
+//             {
+//                 path: 'dashboard/:dashboardId',
+//                 element: (
+//                     <Suspense fallback={<LoadingSpinner />}>
+//                         <Dashboard />
+//                     </Suspense>
+//                 ),
+//             },
+//         ],
+//     },
+// ], {
+//     basename: '/OAuth_Test_App/' // ← ДОБАВЬТЕ ЭТУ СТРОКУ
+// });
+
+
 const router = createBrowserRouter([
     {
         path: '/',
         element: <Root />,
         errorElement: <ErrorPage404 />,
         loader: rootLoader,
-        HydrateFallback: LoadingSpinner,
         children: [
             {
-                index: true,
+                index: true, // Этот маршрут будет отображаться на '/'
+                element: (
+                    <Suspense fallback={<LoadingSpinner />}>
+                        <Entrance />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'entrance/:entranceId', // Добавьте этот маршрут
                 element: (
                     <Suspense fallback={<LoadingSpinner />}>
                         <Entrance />
@@ -39,7 +77,7 @@ const router = createBrowserRouter([
         ],
     },
 ], {
-    basename: '/OAuth_Test_App/' // ← ДОБАВЬТЕ ЭТУ СТРОКУ
+    basename: '/OAuth_Test_App/'
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -47,3 +85,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <RouterProvider router={router} />
     </React.StrictMode>
 );
+
+
+
+
