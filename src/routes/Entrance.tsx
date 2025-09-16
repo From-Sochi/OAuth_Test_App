@@ -1,14 +1,5 @@
 import { useEffect } from 'react';
-import {
-    Config,
-    OAuthList,
-    Auth,
-    WidgetEvents,
-    OAuthListInternalEvents,
-    ConfigResponseMode,
-    ConfigSource,
-    OAuthName
-} from '@vkid/sdk';
+import { Config, OAuthList, Auth, WidgetEvents, OAuthListInternalEvents, ConfigResponseMode, ConfigSource, OAuthName } from '@vkid/sdk';
 import { useNavigate } from 'react-router-dom';
 
 interface AuthSuccessData {
@@ -29,7 +20,7 @@ function Entrance() {
     useEffect(() => {
         // Инициализация конфигурации VK ID
         Config.init({
-            app: 54140536, // Ваш ID приложения
+            app: 54140536, // Мой ID приложения
             redirectUrl: 'https://from-sochi.github.io/OAuth_Test_App/', // Используем точный redirect URL из настроек VK
             responseMode: ConfigResponseMode.Callback,
             source: ConfigSource.LOWCODE,
@@ -39,18 +30,16 @@ function Entrance() {
         const container = document.getElementById('vkid-container');
         if (!container) return;
 
-        // Очищаем контейнер перед рендером
         container.innerHTML = '';
 
         const oAuth = new OAuthList();
 
         oAuth.render({
             container: container,
-            oauthList: [OAuthName.VK], // Исправлено: используем OAuthName.VK вместо OAuthName.VKID
+            oauthList: [OAuthName.VK],
         })
             .on(WidgetEvents.ERROR, (error: any) => {
                 console.error('Ошибка авторизации VK ID:', error);
-                // Здесь можно добавить обработку ошибок для пользователя
             })
             .on(OAuthListInternalEvents.LOGIN_SUCCESS, (payload: LoginSuccessPayload) => {
                 console.log('Получен код авторизации:', payload.code);
@@ -59,8 +48,6 @@ function Entrance() {
                 Auth.exchangeCode(payload.code, payload.device_id)
                     .then((data: AuthSuccessData) => {
                         console.log('Успешная авторизация:', data);
-
-                        // Сохраняем данные в localStorage
                         localStorage.setItem('vk_token', data.access_token);
                         localStorage.setItem('vk_user_id', data.user_id.toString());
 
@@ -68,7 +55,6 @@ function Entrance() {
                             localStorage.setItem('vk_email', data.email);
                         }
 
-                        // Здесь можно перенаправить пользователя или обновить состояние приложения
                         // alert('Авторизация прошла успешно!');
 
                         window.location.href = 'https://from-sochi.github.io/STAR-WARS/';
