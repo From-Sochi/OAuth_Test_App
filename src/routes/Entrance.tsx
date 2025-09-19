@@ -57,7 +57,9 @@ function Entrance() {
 
                         // alert('Авторизация прошла успешно!');
 
-                        window.location.href = 'https://from-sochi.github.io/STAR-WARS/';
+                        // window.location.href = 'https://from-sochi.github.io/STAR-WARS/';
+                        window.location.href = 'https://from-sochi.github.io/OAuth_Test_Front/';
+
 
 
                     })
