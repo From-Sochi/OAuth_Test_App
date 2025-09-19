@@ -12,37 +12,6 @@ import Entrance from './routes/Entrance.tsx';
 import Dashboard from './routes/Dashboard.tsx';
 import { LoadingSpinner } from './routes/LoadingSpinner.tsx';
 
-// const router = createBrowserRouter([
-//     {
-//         path: '/',
-//         element: <Root />,
-//         errorElement: <ErrorPage404 />,
-//         loader: rootLoader,
-//         HydrateFallback: LoadingSpinner,
-//         children: [
-//             {
-//                 index: true,
-//                 element: (
-//                     <Suspense fallback={<LoadingSpinner />}>
-//                         <Entrance />
-//                     </Suspense>
-//                 ),
-//             },
-//             {
-//                 path: 'dashboard/:dashboardId',
-//                 element: (
-//                     <Suspense fallback={<LoadingSpinner />}>
-//                         <Dashboard />
-//                     </Suspense>
-//                 ),
-//             },
-//         ],
-//     },
-// ], {
-//     basename: '/OAuth_Test_App/' // ← ДОБАВЬТЕ ЭТУ СТРОКУ
-// });
-
-
 const router = createBrowserRouter([
     {
         path: '/',
@@ -51,7 +20,7 @@ const router = createBrowserRouter([
         loader: rootLoader,
         children: [
             {
-                index: true, // Этот маршрут будет отображаться на '/'
+                index: true, 
                 element: (
                     <Suspense fallback={<LoadingSpinner />}>
                         <Entrance />
@@ -59,7 +28,7 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: 'entrance/:entranceId', // Добавьте этот маршрут
+                path: 'entrance/:entranceId', 
                 element: (
                     <Suspense fallback={<LoadingSpinner />}>
                         <Entrance />

@@ -10,7 +10,6 @@ export async function loader() {
 function Root() {
     const location = useLocation();
 
-    // Функция для проверки активной ссылки
     const isActive = (path: string) => {
         return location.pathname.includes(path);
     };
@@ -18,9 +17,7 @@ function Root() {
     return (
         <>
             <nav>
-                {/* <Link to={`/entrance/1`} className={isActive('entrance') ? 'active' : ''}>Войти</Link> */}
                 <Link to={`/`} className={isActive('entrance') ? 'active' : ''}>Войти</Link>
-
                 <Link to={`/dashboard/main`} className={isActive('dashboard') ? 'active' : ''}>Без авторизации</Link>
             </nav>
             <main>
